@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block content %}   
+
+<div class="container ">
+    <div class="row border-top  border-white">
+        <div class="col-3 border-end border-white">
+            <!--Left side bar with something -->
+            <p>something</p>
+        </div>
+
+        <div class="col-6">
+            <br>
+            <h5><a href="{%url 'readBlog' blog.id %}"class="card-title">{{blog.title}}</a></h5>
+            {%if blog.date_last_edited%}
+            <h6 class="card-subtitle text-body-secondary">{{blog.date_posted}}</h6>
+            <p class="card-subtitle mb-3 text-body-secondary">Edited:{{blog.date_last_edited}}</p>
+            {%else%}
+            <h6 class="card-subtitle mb-3 text-body-secondary">{{blog.date_posted}}</h6>
+            {%endif%}
+            <p class="card-text" style="white-space: pre-wrap">{{blog.content}}</p>
+            <br>
+            <br>
+            <h4 class="card-title border-top border-white">Comments</h4>
+            <br>
+            {%for c in coms%}
+            <h5 class="card-title"> {{c.cAuthor.username}}</h5>
+            <p class="card-subtitle"> {{c.date_posted}}</p>
+            <p class="card-text" style="white-space: pre-wrap"> {{c.content}}</p>
+            <a href="{%url 'cDel' c.id blog.id%}" class="btn btn-outline-danger">Delete</a>
+            {%endfor%}
+            <br>
+            <form enctype="multipart/form-data" method="post">
+                {%csrf_token%}
+                {% render_field form.content type="textarea" placeholder="Comment..." class+="form-control"%}
+                <input type="hidden" value="{{blog.id}}" name="blog">
+                <button type="submit" class="btn btn-outline-success">Post</button>
+            </form>
+        </div>
+
+        <div class="col-3 border-start border-white">
+            <!--Author details-->
+            <br>
+            <h5>Author: {{blog.author.username}}</h5>
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}

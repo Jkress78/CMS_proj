@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+    
+{% block content %}   
+
+<div class="container">
+    <div class="row">
+{%for b in blogs%}
+        <div class="col-6 ">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">{{b.author.username}}</div>
+                <div class="card-body">
+                    <h5><a href="{%url 'readBlog' b.id %}"class="card-title">{{b.title}}</a></h5>
+                    {%if b.date_last_edited%}
+                    <h6 class="card-subtitle text-body-secondary">{{b.date_posted}}</h6>
+                    <p class="card-subtitle mb-2 text-body-secondary">{{b.date_last_edited}}</p>
+                    {%else%}
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{b.date_posted}}</h6>
+                    {%endif%}
+                    <p class="card-text">{{b.cont_prev}}</p>
+                    <a href="{%url 'bDel' b.id %}" class="btn btn-outline-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    
+{%endfor%} 
+        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#blogcreate"> + </button>
+    </div>   
+</div>
+
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="blogcreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create a New Blog</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button type="submit" class="btn btn-outline-success">Create</button>
+            </form>
+            <br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
